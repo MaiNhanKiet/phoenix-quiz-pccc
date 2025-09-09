@@ -1,0 +1,97 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum House {
+  FAERIE
+  PHOENIX
+  THUNDERBIRD
+  UNICORN
+}
+
+enum AttemptStatus {
+  PENDING
+  ACTIVE
+  SUBMITTED
+  EXPIRED
+}
+
+model Student {
+  student_id   String   @id @map("_id") @db.VarChar(8)
+  full_name    String   @default("") @db.VarChar(100)
+  phone_number String   @default("") @db.VarChar(255)
+  class_code   String   @default("") @db.VarChar(2)
+  company_unit String   @default("") @db.VarChar(2)
+  house        House
+  created_at   DateTime @default(now()) @db.Timestamp(0)
+
+  attempts     Attempt[]
+
+  @@index([class_code])
+  @@index([company_unit])
+  @@map("Student")
+}
+
+model Question {
+  id       String   @id @map("_id") @db.VarChar(36)
+  order    Int      @unique
+  content  String   @db.Text
+  options  Option[]
+  answers  AttemptAnswer[]
+
+  @@map("Questions")
+}
+
+model Option {
+  id          String   @id @map("_id") @db.VarChar(36)
+  question_id String   @db.VarChar(36)
+  order       Int
+  content     String   @db.Text
+  is_correct  Boolean
+
+  question    Question @relation(fields: [question_id], references: [id], onDelete: Cascade)
+  answers     AttemptAnswer[]
+
+  @@unique([question_id, order])
+  @@map("Options")
+}
+
+model Attempt {
+  id             String         @id @default(uuid()) @map("_id") @db.VarChar(36)
+  student_id     String         @db.VarChar(8)
+  status         AttemptStatus  @default(ACTIVE)
+  started_at     DateTime       @default(now()) @db.Timestamp(0)
+  finished_at    DateTime?      @db.Timestamp(0)
+  time_limit_sec Int?
+  total_count    Int
+  correct_count  Int            @default(0)
+  score          Decimal?       @db.Decimal(5, 2)
+  question_order Json
+  options_order  Json
+
+  student Student @relation(fields: [student_id], references: [student_id], onDelete: Cascade)
+  answers AttemptAnswer[]
+
+  @@map("Attempts")
+}
+
+model AttemptAnswer {
+  id          String   @id @default(uuid()) @map("_id") @db.VarChar(36)
+  attempt_id  String   @db.VarChar(36)
+  question_id String   @db.VarChar(36)
+  option_id   String?  @db.VarChar(36)
+  answered_at DateTime? @db.Timestamp(0)
+  is_correct  Boolean?
+
+  attempt   Attempt  @relation(fields: [attempt_id], references: [id], onDelete: Cascade)
+  question  Question @relation(fields: [question_id], references: [id])
+  option    Option?  @relation(fields: [option_id], references: [id])
+
+  @@unique([attempt_id, question_id])
+  @@map("AttemptAnswers")
+}
