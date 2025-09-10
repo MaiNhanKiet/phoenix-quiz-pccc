@@ -35,6 +35,10 @@ class QuestionServices {
 
     return shuffledQuestions
   }
+
+  async checkCorrectAnswer(question_id: string, option_id: string) {
+    return this.questionRepository.getQuestionById(question_id, option_id)
+  }
 }
 
 const questionServices = new QuestionServices()

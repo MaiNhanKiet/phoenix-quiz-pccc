@@ -12,6 +12,20 @@ class QuestionRepository {
       }
     })
   }
+
+  async getQuestionById(id: string, option_id: string) {
+    return this.model.findUnique({
+      where: {
+        id
+      },
+      select: {
+        options: {
+          where: { id: option_id },
+          select: { id: true, content: true, is_correct: true }
+        }
+      }
+    })
+  }
 }
 
 export default QuestionRepository

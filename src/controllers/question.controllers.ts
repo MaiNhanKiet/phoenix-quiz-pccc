@@ -1,7 +1,7 @@
 import { ParamsDictionary } from 'express-serve-static-core'
 import { Request, Response, NextFunction } from 'express'
 import questionServices from '~/services/question.services'
-import { AttemptReqBody } from '~/models/user.requests'
+import { AnswerReqBody, AttemptReqBody } from '~/models/user.requests'
 import attemptServices from '~/services/attempt.services'
 import userServices from '~/services/user.services'
 import { ErrorWithStatus } from '~/models/Errors'
@@ -18,14 +18,31 @@ export const getRandomQuestionsController = async (
   if (!student) {
     throw new ErrorWithStatus({
       status: HTTP_STATUS.NOT_FOUND,
-      message: 'MSSV không tồn tại'
+      message: 'MSSV không tồn tại, vui lòng đăng ký'
     })
   }
+
+  await attemptServices.checkAttemptExist(student_id)
 
   const result = await attemptServices.createAttemptWithRandomQuestions(student_id)
 
   res.status(200).json({
     message: 'Lấy bộ câu hỏi thành công',
     result
+  })
+}
+
+export const updateAnswerController = async (
+  req: Request<ParamsDictionary, any, AnswerReqBody>,
+  res: Response,
+  next: NextFunction
+) => {
+  const { attempt_id, question_id } = req.params
+  const { option_id } = req.body
+
+  const result = await attemptServices.updateAnswer(attempt_id, question_id, option_id)
+
+  res.status(200).json({
+    message: 'Cập nhật đáp án thành công'
   })
 }

@@ -122,3 +122,35 @@ export const attemptValidator = validate(
     ['body']
   )
 )
+
+export const answerValidator = validate(
+  checkSchema({
+    // attempt_id: {
+    //   in: ['params'],
+    //   notEmpty: {
+    //     errorMessage: 'ID bài thi không được để trống'
+    //   },
+    //   isUUID: {
+    //     errorMessage: 'ID bài thi phải là định dạng UUID'
+    //   }
+    // },
+    // question_id: {
+    //   in: ['params'],
+    //   notEmpty: {
+    //     errorMessage: 'ID câu hỏi không được để trống'
+    //   },
+    //   isUUID: {
+    //     errorMessage: 'ID câu hỏi phải là định dạng UUID'
+    //   }
+    // },
+    // option_id: {
+    //   in: ['body'],
+    //   notEmpty: {
+    //     errorMessage: 'ID câu trả lời không được để trống'
+    //   },
+    //   isUUID: {
+    //     errorMessage: 'ID câu trả lời phải là định dạng UUID'
+    //   }
+    // }
+  })
+)

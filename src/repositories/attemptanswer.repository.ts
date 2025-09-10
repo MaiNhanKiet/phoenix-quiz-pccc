@@ -16,6 +16,19 @@ class AttemptAnswerRepository {
       }))
     })
   }
+
+  async upsertAnswer(attempt_id: string, question_id: string, option_id: string, is_correct: boolean) {
+    return this.model.update({
+      where: {
+        attempt_id_question_id: { attempt_id, question_id }
+      },
+      data: {
+        option_id,
+        is_correct,
+        answered_at: new Date()
+      }
+    })
+  }
 }
 
 export default AttemptAnswerRepository

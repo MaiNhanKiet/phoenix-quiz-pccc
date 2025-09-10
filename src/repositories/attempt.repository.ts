@@ -23,6 +23,14 @@ class AttemptRepository {
       }
     })
   }
+
+  async findAttemptByStudentId(student_id: string) {
+    return this.model.findFirst({
+      where: {
+        student_id
+      }
+    })
+  }
 }
 
 export default AttemptRepository

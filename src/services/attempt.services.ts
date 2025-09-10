@@ -1,3 +1,5 @@
+import { at } from 'lodash'
+import { ErrorWithStatus } from '~/models/Errors'
 import AttemptRepository from '~/repositories/attempt.repository'
 import AttemptAnswerRepository from '~/repositories/attemptanswer.repository'
 import questionServices from '~/services/question.services'
@@ -41,6 +43,30 @@ class AttemptServices {
       attemptId: attempt.id,
       questions
     }
+  }
+
+  async checkAttemptExist(student_id: string) {
+    const attempt = await this.attemptRepository.findAttemptByStudentId(student_id)
+    if (attempt) {
+      throw new ErrorWithStatus({
+        status: 400,
+        message: attempt.status === 'ACTIVE' ? 'Bạn đã có bài thi đang làm' : 'Bạn đã hoàn thành bài thi rồi'
+      })
+    }
+  }
+
+  async updateAnswer(attempt_id: string, question_id: string, option_id: string) {
+    // kiểm tra option_id của user đã trả lời đúng hay chưa
+    const result = await questionServices.checkCorrectAnswer(question_id, option_id)
+    if (!result) {
+      throw new ErrorWithStatus({
+        status: 404,
+        message: 'Câu hỏi hoặc đáp án không tồn tại'
+      })
+    }
+    const { is_correct } = result.options[0]
+    // cập nhật đáp án vào bảng AttemptAnswer
+    return this.attemptAnswerRepository.upsertAnswer(attempt_id, question_id, option_id, is_correct)
   }
 }
 

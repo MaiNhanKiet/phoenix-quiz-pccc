@@ -8,7 +8,9 @@ export interface RegisterReqBody {
   company_unit: string
   house: House
 }
-
 export interface AttemptReqBody {
   student_id: string
+}
+export interface AnswerReqBody {
+  option_id: string
 }

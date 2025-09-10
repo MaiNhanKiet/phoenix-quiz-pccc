@@ -4,8 +4,9 @@ import { wrapAsync } from './utils/handler'
 import cors from 'cors'
 import prismaService from './services/prisma.services'
 import { registerController } from './controllers/user.controllers'
-import { attemptValidator, registerValidator } from './middlewares/user.middlewares'
-import { getRandomQuestionsController } from './controllers/question.controllers'
+import { answerValidator, attemptValidator, registerValidator } from './middlewares/user.middlewares'
+import { getRandomQuestionsController, updateAnswerController } from './controllers/question.controllers'
+import questionServices from './services/question.services'
 const app = express()
 const port = 3000
 
@@ -20,6 +21,14 @@ prismaService.connect()
 
 app.post('/register', registerValidator, wrapAsync(registerController))
 app.post('/attempt', attemptValidator, wrapAsync(getRandomQuestionsController))
+app.put('/attempt/:attempt_id/answer/:question_id', answerValidator, wrapAsync(updateAnswerController))
+app.get('/test', async (req, res) => {
+  const result = await questionServices.checkCorrectAnswer('q13-1111-aaaa-bbbb-0013', 'o13-1111-aaaa-bbbb-0003')
+  res.status(200).json({
+    message: 'Hello World!',
+    data: result
+  })
+})
 
 app.use(defaultErrorHandler)
 
