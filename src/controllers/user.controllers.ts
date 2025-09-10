@@ -12,7 +12,7 @@ export const registerController = async (
   const result = await userServices.createStudent(req.body)
 
   res.status(200).json({
-    message: 'Register successfully',
+    message: 'Đăng kí thành công',
     result
   })
 }

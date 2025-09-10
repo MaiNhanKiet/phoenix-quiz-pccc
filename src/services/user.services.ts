@@ -12,13 +12,7 @@ class UserServices {
 
   async checkMSSVExist(student_id: string) {
     const result = await this.studentRepository.checkMSSVExist(student_id)
-    if (result) {
-      throw new ErrorWithStatus({
-        status: HTTP_STATUS.UNAUTHORIZED,
-        message: 'MSSV đã tồn tại'
-      })
-    }
-    return true
+    return result ? true : false
   }
 
   async createStudent(payload: RegisterReqBody) {

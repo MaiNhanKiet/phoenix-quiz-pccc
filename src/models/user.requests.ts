@@ -8,3 +8,7 @@ export interface RegisterReqBody {
   company_unit: string
   house: House
 }
+
+export interface AttemptReqBody {
+  student_id: string
+}

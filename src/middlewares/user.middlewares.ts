@@ -18,7 +18,13 @@ export const registerValidator = validate(
         },
         custom: {
           options: async (values) => {
-            await userServices.checkMSSVExist(values)
+            const rs = await userServices.checkMSSVExist(values)
+            if (rs) {
+              throw new ErrorWithStatus({
+                status: HTTP_STATUS.UNAUTHORIZED,
+                message: 'MSSV đã tồn tại'
+              })
+            }
             return true
           }
         }
@@ -93,6 +99,23 @@ export const registerValidator = validate(
               })
             }
           }
+        }
+      }
+    },
+    ['body']
+  )
+)
+
+export const attemptValidator = validate(
+  checkSchema(
+    {
+      student_id: {
+        notEmpty: {
+          errorMessage: 'MSSV không được để trống'
+        },
+        matches: {
+          options: /^(SE|SA|SS)\d{6}$/,
+          errorMessage: 'MSSV không đúng định dạng'
         }
       }
     },
