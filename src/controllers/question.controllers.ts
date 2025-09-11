@@ -99,3 +99,18 @@ export const studentLeaderboardController = async (
     result
   })
 }
+
+export const getAttemptController = async (
+  req: Request<ParamsDictionary, any, any>, //
+  res: Response,
+  next: NextFunction
+) => {
+  const { attempt_id } = req.params
+
+  const result = await attemptServices.getAttemptById(attempt_id)
+
+  res.status(200).json({
+    message: 'Lấy bài thi của sinh viên thành công',
+    result
+  })
+}

@@ -242,3 +242,18 @@ export const studentLeaderboardValidator = validate(
     }
   })
 )
+
+export const getAttemptValidator = validate(
+  checkSchema({
+    attempt_id: {
+      in: ['params'],
+      notEmpty: {
+        errorMessage: 'ID bài thi không được để trống'
+      },
+      matches: {
+        options: /^(SE|SA|SS)\d{6}$/,
+        errorMessage: 'MSSV không đúng định dạng'
+      }
+    }
+  })
+)

@@ -1,5 +1,5 @@
 import { AttemptStatus } from '@prisma/client'
-import { at } from 'lodash'
+import { at, omit } from 'lodash'
 import { ErrorWithStatus } from '~/models/Errors'
 import AttemptRepository from '~/repositories/attempt.repository'
 import AttemptAnswerRepository from '~/repositories/attemptanswer.repository'
@@ -118,6 +118,22 @@ class AttemptServices {
 
   async getStudentLeaderboardEntry(student_id: string) {
     return this.leaderboardRepository.getEntryByStudentId(student_id)
+  }
+
+  async getAttemptById(attempt_id: string) {
+    const attempt = await this.attemptRepository.findAttemptById(attempt_id)
+    if (!attempt) {
+      throw new ErrorWithStatus({
+        status: 404,
+        message: 'ID bài thi không tồn tại'
+      })
+    }
+    const answers = await this.attemptAnswerRepository.findAnswersByAttemptId(attempt_id)
+    const mapped = answers.map((ans) => ({
+      question_id: ans.question_id,
+      option_id: ans.option_id
+    }))
+    return mapped
   }
 }
 

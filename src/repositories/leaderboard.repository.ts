@@ -23,9 +23,11 @@ class LeaderboardRepository {
         student: {
           select: {
             full_name: true,
-            house: true,
             class_code: true,
-            company_unit: true
+            company_unit: true,
+            house: true,
+            shirt: true,
+            accessory: true
           }
         }
       },
@@ -43,9 +45,11 @@ class LeaderboardRepository {
         student: {
           select: {
             full_name: true,
-            house: true,
             class_code: true,
-            company_unit: true
+            company_unit: true,
+            house: true,
+            shirt: true,
+            accessory: true
           }
         }
       },

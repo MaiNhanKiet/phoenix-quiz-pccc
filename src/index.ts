@@ -13,6 +13,7 @@ import {
   updateStudentValidator
 } from './middlewares/user.middlewares'
 import {
+  getAttemptController,
   getRandomQuestionsController,
   leaderboardController,
   studentLeaderboardController,
@@ -35,11 +36,11 @@ prismaService.connect()
 app.post('/register', registerValidator, wrapAsync(registerController))
 app.post('/update', updateStudentValidator, wrapAsync(updateStudentController))
 app.post('/attempt', attemptValidator, wrapAsync(getRandomQuestionsController))
+app.get('/attempt/:attempt_id', submitValidator, wrapAsync(getAttemptController))
 app.put('/attempt/:attempt_id/answer/:question_id', answerValidator, wrapAsync(updateAnswerController))
 app.post('/attempt/:attempt_id/submit', submitValidator, wrapAsync(submitController))
 app.get('/top-leaderboard', wrapAsync(leaderboardController))
 app.get('/leaderboard/:student_id', studentLeaderboardValidator, wrapAsync(studentLeaderboardController))
-
 app.use(defaultErrorHandler)
 
 app.listen(port, () => {
