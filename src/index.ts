@@ -7,6 +7,7 @@ import { registerController } from './controllers/user.controllers'
 import { answerValidator, attemptValidator, registerValidator, submitValidator } from './middlewares/user.middlewares'
 import {
   getRandomQuestionsController,
+  leaderboardController,
   submitController,
   updateAnswerController
 } from './controllers/question.controllers'
@@ -27,6 +28,7 @@ app.post('/register', registerValidator, wrapAsync(registerController))
 app.post('/attempt', attemptValidator, wrapAsync(getRandomQuestionsController))
 app.put('/attempt/:attempt_id/answer/:question_id', answerValidator, wrapAsync(updateAnswerController))
 app.post('/attempt/:attempt_id/submit', submitValidator, wrapAsync(submitController))
+app.get('/top-leaderboard', wrapAsync(leaderboardController))
 
 app.use(defaultErrorHandler)
 

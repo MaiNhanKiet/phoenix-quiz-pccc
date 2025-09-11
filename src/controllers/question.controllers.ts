@@ -6,7 +6,7 @@ import attemptServices from '~/services/attempt.services'
 import userServices from '~/services/user.services'
 import { ErrorWithStatus } from '~/models/Errors'
 import HTTP_STATUS from '~/constants/httpStatus'
-import { omit } from 'lodash'
+import { omit, result } from 'lodash'
 
 export const getRandomQuestionsController = async (
   req: Request<ParamsDictionary, any, AttemptReqBody>,
@@ -60,5 +60,18 @@ export const submitController = async (
   res.status(200).json({
     message: 'Nộp bài thành công',
     result: omit(result, ['question_order', 'options_order', 'time_limit_sec'])
+  })
+}
+
+export const leaderboardController = async (
+  req: Request<ParamsDictionary, any, any>, //
+  res: Response,
+  next: NextFunction
+) => {
+  const result = await attemptServices.getTopLeaderboardEntries()
+
+  res.status(200).json({
+    message: 'Lấy bảng xếp hạng thành công',
+    result
   })
 }

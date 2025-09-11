@@ -31,6 +31,7 @@ model Student {
   created_at   DateTime @default(now()) @db.Timestamp(0)
 
   attempts     Attempt[]
+  leaderboard  Leaderboard?
 
   @@index([class_code])
   @@index([company_unit])
@@ -96,14 +97,13 @@ model AttemptAnswer {
   @@map("AttemptAnswers")
 }
 
-model LeaderboardEntry {
+model Leaderboard {
   id            String   @id @default(uuid()) @map("_id") @db.VarChar(36)
-  student_id    String         @db.VarChar(8)
-  name          String   @db.VarChar(100)
-  house         House
+  student_id    String   @unique @db.VarChar(8)
   score         Int
   total_ms      Int      
   updated_at    DateTime @updatedAt
 
+  student Student @relation(fields: [student_id], references: [student_id], onDelete: Cascade)
   @@index([score, total_ms])
 }

@@ -3,14 +3,17 @@ import { at } from 'lodash'
 import { ErrorWithStatus } from '~/models/Errors'
 import AttemptRepository from '~/repositories/attempt.repository'
 import AttemptAnswerRepository from '~/repositories/attemptanswer.repository'
+import LeaderboardRepository from '~/repositories/leaderboard.repository'
 import questionServices from '~/services/question.services'
 class AttemptServices {
   private attemptRepository: AttemptRepository
   private attemptAnswerRepository: AttemptAnswerRepository
+  private leaderboardRepository: LeaderboardRepository
 
   constructor() {
     this.attemptRepository = new AttemptRepository()
     this.attemptAnswerRepository = new AttemptAnswerRepository()
+    this.leaderboardRepository = new LeaderboardRepository()
   }
 
   /**
@@ -82,7 +85,6 @@ class AttemptServices {
       })
     }
 
-    console.log(attempt)
     if (attempt.status === AttemptStatus.SUBMITTED) {
       throw new ErrorWithStatus({
         status: 400,
@@ -93,6 +95,14 @@ class AttemptServices {
     const answers = await this.attemptAnswerRepository.findAnswersByAttemptId(attempt_id)
     const correct_count = answers.filter((a) => a.is_correct).length
     const score = (correct_count / attempt.total_count) * 10
+
+    // cập nhật bảng xếp hạng
+    await this.leaderboardRepository.createEntry(
+      attempt.student_id,
+      score,
+      finished_at.getTime() - attempt.started_at.getTime()
+    )
+
     // cập nhật attempt
     return this.attemptRepository.updateAttempt(attempt_id, {
       correct_count,
@@ -100,6 +110,10 @@ class AttemptServices {
       status: AttemptStatus.SUBMITTED,
       finished_at
     })
+  }
+
+  async getTopLeaderboardEntries() {
+    return this.leaderboardRepository.getTopEntries(10)
   }
 }
 
