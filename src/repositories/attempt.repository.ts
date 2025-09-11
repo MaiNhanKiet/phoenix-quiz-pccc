@@ -31,6 +31,32 @@ class AttemptRepository {
       }
     })
   }
+
+  async findAttemptById(attempt_id: string) {
+    return this.model.findUnique({
+      where: {
+        id: attempt_id
+      }
+    })
+  }
+
+  async updateAttempt(
+    attempt_id: string,
+    params: { correct_count: number; score: number; status: AttemptStatus; finished_at: Date }
+  ) {
+    const { correct_count, score, status, finished_at } = params
+    return this.model.update({
+      where: {
+        id: attempt_id
+      },
+      data: {
+        correct_count,
+        score,
+        status,
+        finished_at
+      }
+    })
+  }
 }
 
 export default AttemptRepository

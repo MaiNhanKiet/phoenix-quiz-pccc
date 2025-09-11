@@ -29,6 +29,14 @@ class AttemptAnswerRepository {
       }
     })
   }
+
+  async findAnswersByAttemptId(attempt_id: string) {
+    return this.model.findMany({
+      where: {
+        attempt_id
+      }
+    })
+  }
 }
 
 export default AttemptAnswerRepository

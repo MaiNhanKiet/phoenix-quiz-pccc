@@ -95,3 +95,15 @@ model AttemptAnswer {
   @@unique([attempt_id, question_id])
   @@map("AttemptAnswers")
 }
+
+model LeaderboardEntry {
+  id            String   @id @default(uuid()) @map("_id") @db.VarChar(36)
+  student_id    String         @db.VarChar(8)
+  name          String   @db.VarChar(100)
+  house         House
+  score         Int
+  total_ms      Int      
+  updated_at    DateTime @updatedAt
+
+  @@index([score, total_ms])
+}

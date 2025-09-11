@@ -6,6 +6,7 @@ import attemptServices from '~/services/attempt.services'
 import userServices from '~/services/user.services'
 import { ErrorWithStatus } from '~/models/Errors'
 import HTTP_STATUS from '~/constants/httpStatus'
+import { omit } from 'lodash'
 
 export const getRandomQuestionsController = async (
   req: Request<ParamsDictionary, any, AttemptReqBody>,
@@ -44,5 +45,20 @@ export const updateAnswerController = async (
 
   res.status(200).json({
     message: 'Cập nhật đáp án thành công'
+  })
+}
+
+export const submitController = async (
+  req: Request<ParamsDictionary, any, any>, //
+  res: Response,
+  next: NextFunction
+) => {
+  const { attempt_id } = req.params
+
+  const result = await attemptServices.submitAttempt(attempt_id)
+
+  res.status(200).json({
+    message: 'Nộp bài thành công',
+    result: omit(result, ['question_order', 'options_order', 'time_limit_sec'])
   })
 }

@@ -154,3 +154,17 @@ export const answerValidator = validate(
     // }
   })
 )
+
+export const submitValidator = validate(
+  checkSchema({
+    // attempt_id: {
+    //   in: ['params'],
+    //   notEmpty: {
+    //     errorMessage: 'ID bài thi không được để trống'
+    //   },
+    //   isUUID: {
+    //     errorMessage: 'ID bài thi phải là định dạng UUID'
+    //   }
+    // },
+  })
+)

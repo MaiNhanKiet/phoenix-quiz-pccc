@@ -1,3 +1,4 @@
+import { AttemptStatus } from '@prisma/client'
 import { at } from 'lodash'
 import { ErrorWithStatus } from '~/models/Errors'
 import AttemptRepository from '~/repositories/attempt.repository'
@@ -67,6 +68,38 @@ class AttemptServices {
     const { is_correct } = result.options[0]
     // cập nhật đáp án vào bảng AttemptAnswer
     return this.attemptAnswerRepository.upsertAnswer(attempt_id, question_id, option_id, is_correct)
+  }
+
+  async submitAttempt(attempt_id: string) {
+    // thời gian kết thúc
+    const finished_at = new Date()
+    // kiểm tra attempt tồn tại
+    const attempt = await this.attemptRepository.findAttemptById(attempt_id)
+    if (!attempt) {
+      throw new ErrorWithStatus({
+        status: 404,
+        message: 'Bài thi không tồn tại'
+      })
+    }
+
+    console.log(attempt)
+    if (attempt.status === AttemptStatus.SUBMITTED) {
+      throw new ErrorWithStatus({
+        status: 400,
+        message: 'Bài thi đã được nộp, không thể nộp lại'
+      })
+    }
+    // tính điểm
+    const answers = await this.attemptAnswerRepository.findAnswersByAttemptId(attempt_id)
+    const correct_count = answers.filter((a) => a.is_correct).length
+    const score = (correct_count / attempt.total_count) * 10
+    // cập nhật attempt
+    return this.attemptRepository.updateAttempt(attempt_id, {
+      correct_count,
+      score,
+      status: AttemptStatus.SUBMITTED,
+      finished_at
+    })
   }
 }
 
