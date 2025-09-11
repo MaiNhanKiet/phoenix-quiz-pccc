@@ -138,7 +138,8 @@ class AttemptServices {
       question_id: ans.question_id,
       option_id: ans.option_id
     }))
-    return mapped
+
+    return { student_id: attempt.student_id, answers: mapped }
   }
 }
 

@@ -99,18 +99,6 @@ export const updateStudentValidator = validate(
         matches: {
           options: /^(SE|SA|SS)\d{6}$/,
           errorMessage: 'MSSV không đúng định dạng'
-        },
-        custom: {
-          options: async (values) => {
-            const rs = await userServices.checkMSSVExist(values)
-            if (rs) {
-              throw new ErrorWithStatus({
-                status: HTTP_STATUS.UNAUTHORIZED,
-                message: 'MSSV đã tồn tại'
-              })
-            }
-            return true
-          }
         }
       },
       house: {
