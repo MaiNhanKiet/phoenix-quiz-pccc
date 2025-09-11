@@ -21,13 +21,64 @@ enum AttemptStatus {
   EXPIRED
 }
 
+enum Accessory {
+  none
+  face1
+  face2
+  face3
+  hat1
+  hat2
+  hat3
+  hat4
+  hat6
+  hat7
+  hat8
+  hat9
+  hat10
+  hat11
+  hat12
+  hat13
+  hat14
+  hat15
+  hat16
+  hat17
+  hat18
+  hat19
+  hat20
+  hat21
+  glasses1
+  glasses2
+  glasses3
+  glasses4
+  glasses5
+  glasses6
+  glasses7
+  glasses8
+  glasses9
+  glasses10
+  scarf1
+  scarf2
+  hair1
+  hair2
+}
+
+enum Shirt {
+  none
+  shirt1
+  shirt2
+  shirt3
+  shirt4
+}
+
 model Student {
   student_id   String   @id @map("_id") @db.VarChar(8)
   full_name    String   @default("") @db.VarChar(100)
   phone_number String   @default("") @db.VarChar(255)
   class_code   String   @default("") @db.VarChar(2)
   company_unit String   @default("") @db.VarChar(2)
-  house        House
+  house        House?
+  accessory    Accessory?
+  shirt        Shirt?
   created_at   DateTime @default(now()) @db.Timestamp(0)
 
   attempts     Attempt[]

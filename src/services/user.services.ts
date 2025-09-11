@@ -1,6 +1,6 @@
 import HTTP_STATUS from '~/constants/httpStatus'
 import { ErrorWithStatus } from '~/models/Errors'
-import { RegisterReqBody } from '~/models/user.requests'
+import { RegisterReqBody, UpdateStudentInfoReqBody } from '~/models/user.requests'
 import StrudentRepository from '~/repositories/student.respository'
 
 class UserServices {
@@ -17,6 +17,11 @@ class UserServices {
 
   async createStudent(payload: RegisterReqBody) {
     return this.studentRepository.createStudent(payload)
+  }
+
+  async updateStudentInfo(payload: UpdateStudentInfoReqBody) {
+    const { student_id, house, accessory, shirt } = payload
+    return this.studentRepository.updateStudentInfo({ student_id, house, accessory, shirt })
   }
 }
 

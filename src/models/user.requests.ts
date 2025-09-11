@@ -1,4 +1,4 @@
-import { House } from '@prisma/client'
+import { Accessory, House, Shirt } from '@prisma/client'
 
 export interface RegisterReqBody {
   student_id: string
@@ -6,8 +6,15 @@ export interface RegisterReqBody {
   phone_number: string
   class_code: string
   company_unit: string
-  house: House
 }
+
+export interface UpdateStudentInfoReqBody {
+  student_id: string
+  house: House
+  shirt: Shirt
+  accessory: Accessory
+}
+
 export interface AttemptReqBody {
   student_id: string
 }

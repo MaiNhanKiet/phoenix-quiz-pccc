@@ -3,13 +3,14 @@ import { defaultErrorHandler } from './middlewares/error.middlewares'
 import { wrapAsync } from './utils/handler'
 import cors from 'cors'
 import prismaService from './services/prisma.services'
-import { registerController } from './controllers/user.controllers'
+import { registerController, updateStudentController } from './controllers/user.controllers'
 import {
   answerValidator,
   attemptValidator,
   registerValidator,
   studentLeaderboardValidator,
-  submitValidator
+  submitValidator,
+  updateStudentValidator
 } from './middlewares/user.middlewares'
 import {
   getRandomQuestionsController,
@@ -32,6 +33,7 @@ app.use(express.json())
 prismaService.connect()
 
 app.post('/register', registerValidator, wrapAsync(registerController))
+app.post('/update', updateStudentValidator, wrapAsync(updateStudentController))
 app.post('/attempt', attemptValidator, wrapAsync(getRandomQuestionsController))
 app.put('/attempt/:attempt_id/answer/:question_id', answerValidator, wrapAsync(updateAnswerController))
 app.post('/attempt/:attempt_id/submit', submitValidator, wrapAsync(submitController))

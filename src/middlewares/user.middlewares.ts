@@ -1,4 +1,4 @@
-import { House } from '@prisma/client'
+import { Accessory, House, Shirt } from '@prisma/client'
 import { checkSchema } from 'express-validator'
 import HTTP_STATUS from '~/constants/httpStatus'
 import { ErrorWithStatus } from '~/models/Errors'
@@ -83,6 +83,35 @@ export const registerValidator = validate(
           },
           errorMessage: 'Đại đội không hợp lệ'
         }
+      }
+    },
+    ['body']
+  )
+)
+
+export const updateStudentValidator = validate(
+  checkSchema(
+    {
+      student_id: {
+        notEmpty: {
+          errorMessage: 'MSSV không được để trống'
+        },
+        matches: {
+          options: /^(SE|SA|SS)\d{6}$/,
+          errorMessage: 'MSSV không đúng định dạng'
+        },
+        custom: {
+          options: async (values) => {
+            const rs = await userServices.checkMSSVExist(values)
+            if (rs) {
+              throw new ErrorWithStatus({
+                status: HTTP_STATUS.UNAUTHORIZED,
+                message: 'MSSV đã tồn tại'
+              })
+            }
+            return true
+          }
+        }
       },
       house: {
         notEmpty: {
@@ -96,6 +125,36 @@ export const registerValidator = validate(
               throw new ErrorWithStatus({
                 status: HTTP_STATUS.BAD_REQUEST,
                 message: 'Nhà không hợp lệ'
+              })
+            }
+          }
+        }
+      },
+      shirt: {
+        optional: true,
+        custom: {
+          options: async (value) => {
+            console.log(value)
+            const shirtList = Object.values(Shirt)
+            if (!shirtList.includes(value)) {
+              throw new ErrorWithStatus({
+                status: HTTP_STATUS.BAD_REQUEST,
+                message: 'Áo không hợp lệ'
+              })
+            }
+          }
+        }
+      },
+      accessory: {
+        optional: true,
+        custom: {
+          options: async (value) => {
+            console.log(value)
+            const accessoryList = Object.values(Accessory)
+            if (!accessoryList.includes(value)) {
+              throw new ErrorWithStatus({
+                status: HTTP_STATUS.BAD_REQUEST,
+                message: 'Phụ kiện không hợp lệ'
               })
             }
           }

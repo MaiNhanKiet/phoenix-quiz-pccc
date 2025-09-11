@@ -1,4 +1,4 @@
-import { House } from '@prisma/client'
+import { Accessory, House, Shirt } from '@prisma/client'
 import { prisma } from '~/services/client'
 
 class StrudentRepository {
@@ -17,15 +17,13 @@ class StrudentRepository {
     full_name,
     phone_number,
     class_code,
-    company_unit,
-    house
+    company_unit
   }: {
     student_id: string
     full_name: string
     phone_number: string
     class_code: string
     company_unit: string
-    house: House
   }) {
     return this.model.create({
       data: {
@@ -33,8 +31,30 @@ class StrudentRepository {
         full_name,
         phone_number,
         class_code,
-        company_unit,
-        house
+        company_unit
+      }
+    })
+  }
+
+  async updateStudentInfo({
+    student_id,
+    house,
+    shirt,
+    accessory
+  }: {
+    student_id: string
+    house: House
+    shirt?: Shirt
+    accessory?: Accessory
+  }) {
+    return this.model.update({
+      where: {
+        student_id
+      },
+      data: {
+        house,
+        ...(shirt && { shirt }),
+        ...(accessory && { accessory })
       }
     })
   }
