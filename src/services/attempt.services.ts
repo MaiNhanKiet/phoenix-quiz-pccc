@@ -113,7 +113,12 @@ class AttemptServices {
   }
 
   async getTopLeaderboardEntries() {
-    return this.leaderboardRepository.getTopEntries(10)
+    const entries = await this.leaderboardRepository.getTopEntries(10)
+
+    return entries.map((entry, index) => ({
+      rank: index + 1,
+      ...entry
+    }))
   }
 
   async getStudentLeaderboardEntry(student_id: string) {
