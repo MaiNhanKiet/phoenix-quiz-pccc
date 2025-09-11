@@ -75,3 +75,27 @@ export const leaderboardController = async (
     result
   })
 }
+
+export const studentLeaderboardController = async (
+  req: Request<ParamsDictionary, any, any>, //
+  res: Response,
+  next: NextFunction
+) => {
+  const { student_id } = req.params
+
+  const student = await userServices.checkMSSVExist(student_id)
+
+  if (!student) {
+    throw new ErrorWithStatus({
+      status: HTTP_STATUS.NOT_FOUND,
+      message: 'MSSV không tồn tại, vui lòng đăng ký'
+    })
+  }
+
+  const result = await attemptServices.getStudentLeaderboardEntry(student_id)
+
+  res.status(200).json({
+    message: 'Lấy kết quả của sinh viên thành công',
+    result
+  })
+}

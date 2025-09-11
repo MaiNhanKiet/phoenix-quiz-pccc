@@ -115,6 +115,10 @@ class AttemptServices {
   async getTopLeaderboardEntries() {
     return this.leaderboardRepository.getTopEntries(10)
   }
+
+  async getStudentLeaderboardEntry(student_id: string) {
+    return this.leaderboardRepository.getEntryByStudentId(student_id)
+  }
 }
 
 const attemptServices = new AttemptServices()

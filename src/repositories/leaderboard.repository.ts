@@ -36,6 +36,19 @@ class LeaderboardRepository {
 
   async getEntryByStudentId(student_id: string) {
     return this.model.findFirst({
+      select: {
+        student_id: true,
+        score: true,
+        total_ms: true,
+        student: {
+          select: {
+            full_name: true,
+            house: true,
+            class_code: true,
+            company_unit: true
+          }
+        }
+      },
       where: { student_id }
     })
   }

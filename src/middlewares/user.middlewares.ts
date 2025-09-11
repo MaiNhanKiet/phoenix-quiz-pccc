@@ -168,3 +168,18 @@ export const submitValidator = validate(
     // },
   })
 )
+
+export const studentLeaderboardValidator = validate(
+  checkSchema({
+    student_id: {
+      in: ['params'],
+      notEmpty: {
+        errorMessage: 'MSSV không được để trống'
+      },
+      matches: {
+        options: /^(SE|SA|SS)\d{6}$/,
+        errorMessage: 'MSSV không đúng định dạng'
+      }
+    }
+  })
+)
