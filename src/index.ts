@@ -23,8 +23,6 @@ import {
 } from './controllers/question.controllers'
 import questionServices from './services/question.services'
 const app = express()
-const port = 3000
-
 app.use(
   cors({
     origin: '*'
@@ -34,6 +32,7 @@ app.use(express.json())
 
 prismaService.connect()
 
+app.get('/healthz', (_req, res) => res.send('ok'))
 app.post('/register', registerValidator, wrapAsync(registerController))
 app.post('/update', updateStudentValidator, wrapAsync(updateStudentController))
 app.post('/attempt', attemptValidator, wrapAsync(getRandomQuestionsController))
@@ -46,6 +45,7 @@ app.post('/feedback/:student_id', feedbackValidator, wrapAsync(feedbackControlle
 
 app.use(defaultErrorHandler)
 
+const port = Number(process.env.PORT) || 3000
 app.listen(port, () => {
   console.log(`\x1b[34mPROJECT OPEN ON PORT: \x1b[31m${port}\x1b[0m`)
 })

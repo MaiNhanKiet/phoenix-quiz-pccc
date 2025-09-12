@@ -135,6 +135,7 @@ class AttemptServices {
       })
     }
     const answers = await this.attemptAnswerRepository.findAnswersByAttemptId(attempt_id)
+
     const mapped = answers.map((ans) => ({
       question_id: ans.question_id,
       option_id: ans.option_id
