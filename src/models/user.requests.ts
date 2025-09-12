@@ -21,3 +21,8 @@ export interface AttemptReqBody {
 export interface AnswerReqBody {
   option_id: string
 }
+
+export interface FeedbackReqBody {
+  comment: string
+  rating: number
+}

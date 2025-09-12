@@ -45,6 +45,7 @@ class AttemptServices {
     // 5) Trả về FE
     return {
       attemptId: attempt.id,
+      status: attempt.status,
       questions
     }
   }

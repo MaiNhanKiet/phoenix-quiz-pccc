@@ -245,3 +245,38 @@ export const getAttemptValidator = validate(
     }
   })
 )
+
+export const feedbackValidator = validate(
+  checkSchema({
+    student_id: {
+      in: ['params'],
+      notEmpty: {
+        errorMessage: 'MSSV không được để trống'
+      },
+      matches: {
+        options: /^(SE|SA|SS)\d{6}$/,
+        errorMessage: 'MSSV không đúng định dạng'
+      }
+    },
+    comment: {
+      in: ['body'],
+      isString: {
+        errorMessage: 'Bình luận không hợp lệ'
+      },
+      isLength: {
+        options: { min: 1, max: 500 },
+        errorMessage: 'Bình luận tối đa 500 ký tự'
+      }
+    },
+    rating: {
+      in: ['body'],
+      notEmpty: {
+        errorMessage: 'Đánh giá không được để trống'
+      },
+      isInt: {
+        options: { min: 1, max: 5 },
+        errorMessage: 'Đánh giá từ 1 đến 5'
+      }
+    }
+  })
+)

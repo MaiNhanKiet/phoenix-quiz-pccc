@@ -83,6 +83,7 @@ model Student {
 
   attempts     Attempt[]
   leaderboard  Leaderboard?
+  eventFeedback EventFeedback?
 
   @@index([class_code])
   @@index([company_unit])
@@ -157,4 +158,14 @@ model Leaderboard {
 
   student Student @relation(fields: [student_id], references: [student_id], onDelete: Cascade)
   @@index([score, total_ms])
+}
+
+model EventFeedback {
+  id            String   @id @default(uuid()) @map("_id") @db.VarChar(36)
+  student_id    String   @unique @db.VarChar(8)
+  comment       String   @db.Text
+  rating        Int      
+  created_at    DateTime @default(now()) @db.Timestamp(0) 
+
+  student Student @relation(fields: [student_id], references: [student_id], onDelete: Cascade)
 }

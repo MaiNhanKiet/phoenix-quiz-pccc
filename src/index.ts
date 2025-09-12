@@ -3,10 +3,11 @@ import { defaultErrorHandler } from './middlewares/error.middlewares'
 import { wrapAsync } from './utils/handler'
 import cors from 'cors'
 import prismaService from './services/prisma.services'
-import { registerController, updateStudentController } from './controllers/user.controllers'
+import { feedbackController, registerController, updateStudentController } from './controllers/user.controllers'
 import {
   answerValidator,
   attemptValidator,
+  feedbackValidator,
   registerValidator,
   studentLeaderboardValidator,
   submitValidator,
@@ -41,6 +42,8 @@ app.put('/attempt/:attempt_id/answer/:question_id', answerValidator, wrapAsync(u
 app.post('/attempt/:attempt_id/submit', submitValidator, wrapAsync(submitController))
 app.get('/top-leaderboard', wrapAsync(leaderboardController))
 app.get('/leaderboard/:student_id', studentLeaderboardValidator, wrapAsync(studentLeaderboardController))
+app.post('/feedback/:student_id', feedbackValidator, wrapAsync(feedbackController))
+
 app.use(defaultErrorHandler)
 
 app.listen(port, () => {
