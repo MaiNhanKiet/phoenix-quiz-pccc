@@ -152,7 +152,7 @@ model AttemptAnswer {
 model Leaderboard {
   id            String   @id @default(uuid()) @map("_id") @db.VarChar(36)
   student_id    String   @unique @db.VarChar(8)
-  score         Int
+  score         Float
   total_ms      Int      
   updated_at    DateTime @updatedAt
 
