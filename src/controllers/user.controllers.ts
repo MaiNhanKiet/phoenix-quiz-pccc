@@ -58,6 +58,15 @@ export const feedbackController = async (
     })
   }
 
+  const feedbackExist = await userServices.checkFeedbackExist(student_id)
+
+  if (feedbackExist) {
+    throw new ErrorWithStatus({
+      status: HTTP_STATUS.BAD_REQUEST,
+      message: 'Bạn đã gửi đánh giá rồi, cảm ơn bạn!'
+    })
+  }
+
   const result = await userServices.writeFeedback(student_id, comment, rating)
 
   res.status(200).json({

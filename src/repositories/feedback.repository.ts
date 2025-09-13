@@ -11,6 +11,15 @@ class FeedbackRepository {
       }
     })
   }
+
+  async checkFeedbackExist(student_id: string) {
+    const result = await this.model.findFirst({
+      where: {
+        student_id
+      }
+    })
+    return result ? true : false
+  }
 }
 
 export default FeedbackRepository

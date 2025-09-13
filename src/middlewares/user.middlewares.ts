@@ -265,7 +265,7 @@ export const feedbackValidator = validate(
       },
       isLength: {
         options: { min: 1, max: 500 },
-        errorMessage: 'Bình luận tối đa 500 ký tự'
+        errorMessage: 'Bình luận từ 1 đến 500 ký tự'
       }
     },
     rating: {

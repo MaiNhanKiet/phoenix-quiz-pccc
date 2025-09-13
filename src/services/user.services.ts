@@ -30,6 +30,10 @@ class UserServices {
   async writeFeedback(student_id: string, comment: string, rating: number) {
     return this.feedbackRepository.createFeedback(student_id, comment, rating)
   }
+
+  async checkFeedbackExist(student_id: string) {
+    return this.feedbackRepository.checkFeedbackExist(student_id)
+  }
 }
 
 const userServices = new UserServices()
