@@ -67,7 +67,7 @@ export const registerValidator = validate(
         isLength: {
           options: {
             min: 1,
-            max: 6
+            max: 10
           },
           errorMessage: 'Lớp không hợp lệ'
         }
@@ -79,7 +79,7 @@ export const registerValidator = validate(
         isLength: {
           options: {
             min: 1,
-            max: 6
+            max: 4
           },
           errorMessage: 'Đại đội không hợp lệ'
         }
